@@ -8,7 +8,7 @@ const guildConfig = {
         ctaButton: { text: "WATCH THE FIRST CHRONICLE", link: "#" },
     },
     banner: {
-        image: "https://i.imgur.com/example.jpg" // Placeholder for your big banner image
+        image: "assets/lore-artwork.png" // Placeholder for your big banner image
     },
     lore: {
         subheading: "From the Endless Ice, A New Legend Emerges",
@@ -18,7 +18,7 @@ const guildConfig = {
             "From their hidden workshops, they venture into the unknown to gather impossible materials—the light of a fallen star, the echo of a whale's song, the chill of a timeless blizzard. With these, they craft pebbles of immense power and beauty, each a testament to a legendary journey.",
             "The Pebble Guild is the story of these artisans. Their tales are just beginning."
         ],
-        image: "https://placehold.co/600x400/a3d5ff/1e293b?text=Lore+Artwork"
+         image: "assets/lore-artwork.png"
     },
     roadmap: {
         subheading: "The Journey Ahead",
