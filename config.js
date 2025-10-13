@@ -18,7 +18,7 @@ const guildConfig = {
             "From their hidden workshops, they venture into the unknown to gather impossible materials—the light of a fallen star, the echo of a whale's song, the chill of a timeless blizzard. With these, they craft pebbles of immense power and beauty, each a testament to a legendary journey.",
             "The Pebble Guild is the story of these artisans. Their tales are just beginning."
         ],
-         image: "assets/lore-artwork.png"
+         image: "assets/ComingSoon.gif"
     },
     roadmap: {
         subheading: "The Journey Ahead",
