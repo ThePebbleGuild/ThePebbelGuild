@@ -9,20 +9,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Playful, Bright, and Animated Style */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f0f8ff; /* Fallback color */
+            background-color: #eaf2f8; 
             color: #1e293b;
         }
         
-        .epic-heading {
-            color: #0f172a;
-            font-weight: 900;
-        }
-
         .section-heading {
             color: #1e293b;
+            font-weight: 900;
         }
 
         .premium-button {
@@ -40,72 +35,99 @@
             transform: scale(1.05) translateY(-2px);
             box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.45);
         }
+
+        /* Hero Section Styling */
+        #hero-container {
+            position: relative;
+            height: 200vh; /* Taller to allow for scrolling content over sticky BG */
+        }
+        #hero-background {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+        #hero-foreground {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* The children now control the layout and height */
+        }
         
-        .disabled-button {
-            background-color: #d1d5db;
-            color: #6b7280;
-            border-radius: 9999px;
-            cursor: not-allowed;
+        /* Roadmap Path Styling */
+        #roadmap .roadmap-path {
+            position: relative;
+        }
+        #roadmap .roadmap-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100px;
+            background-color: #94a3b8;
+            background-image: linear-gradient(to bottom, #94a3b8, #94a3b8 50%, transparent 50%);
+            background-size: 100% 10px;
+        }
+        @media (min-width: 1024px) {
+            #roadmap .roadmap-item:not(:last-child)::after {
+                width: 150px;
+                height: 4px;
+                left: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                 background-image: linear-gradient(to right, #94a3b8, #94a3b8 50%, transparent 50%);
+            }
+             #roadmap .roadmap-item:nth-child(even):not(:last-child)::after {
+                left: auto;
+                right: 100%;
+             }
         }
 
-        .content-card {
-            background: white;
+        /* Ecosystem Card with Lock */
+        .ecosystem-card {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
             border-radius: 24px;
-            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb;
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.2);
         }
-        .content-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+        .ecosystem-card .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            transition: background 0.3s ease;
         }
-
-        /* Animations */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        .ecosystem-card:hover .overlay {
+            background: rgba(0,0,0,0.3);
         }
-        
-        .animate-float {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .ecosystem-card .lock-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 2rem;
+            height: 2rem;
+            color: rgba(255,255,255,0.7);
         }
 
-        .animate-load-in {
-            animation: fadeInUp 1s ease-out forwards;
-        }
-
+        /* Scroll Animations */
         .animate-on-scroll {
             opacity: 0;
             transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateY(50px);
         }
-        
-        .slide-in-up { transform: translateY(50px); }
-        .slide-in-left { transform: translateX(-50px); }
-        .slide-in-right { transform: translateX(50px); }
-        .pop-in { transform: scale(0.9); }
-
         .animate-on-scroll.is-visible {
             opacity: 1;
-            transform: translateY(0) translateX(0) scale(1);
+            transform: translateY(0);
         }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #e6f7ff; }
-        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #2563eb; }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -113,111 +135,96 @@
     <!-- Header -->
     <header id="header" class="fixed w-full top-0 z-50 transition-colors duration-300 bg-white/80 backdrop-blur-sm border-b border-gray-200/50">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#home" class="text-2xl font-black uppercase tracking-widest text-slate-800">
-                The Pebble Guild
-            </a>
+            <a href="#home" class="text-2xl font-black uppercase tracking-widest text-slate-800">The Pebble Guild</a>
             <nav class="hidden md:flex space-x-8">
-                <a href="#lore" class="text-slate-600 hover:text-blue-500 font-semibold transition-colors duration-300">Lore</a>
-                <a href="#roadmap" class="text-slate-600 hover:text-blue-500 font-semibold transition-colors duration-300">Roadmap</a>
-                <a href="#ecosystem" class="text-slate-600 hover:text-blue-500 font-semibold transition-colors duration-300">Ecosystem</a>
-                <a href="#community" class="text-slate-600 hover:text-blue-500 font-semibold transition-colors duration-300">Community</a>
-                <a href="#faq" class="text-slate-600 hover:text-blue-500 font-semibold transition-colors duration-300">FAQ</a>
+                <a href="#lore" class="text-slate-600 hover:text-blue-500 font-semibold">Lore</a>
+                <a href="#roadmap" class="text-slate-600 hover:text-blue-500 font-semibold">Journey</a>
+                <a href="#ecosystem" class="text-slate-600 hover:text-blue-500 font-semibold">Future</a>
+                <a href="#community" class="text-slate-600 hover:text-blue-500 font-semibold">Community</a>
+                <a href="#faq" class="text-slate-600 hover:text-blue-500 font-semibold">FAQ</a>
             </nav>
-            <button id="mobile-menu-button" class="md:hidden text-slate-800 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-             <a href="#lore" class="block text-center py-3 px-4 font-semibold text-slate-600 hover:bg-blue-50">Lore</a>
-             <a href="#roadmap" class="block text-center py-3 px-4 font-semibold text-slate-600 hover:bg-blue-50">Roadmap</a>
-             <a href="#ecosystem" class="block text-center py-3 px-4 font-semibold text-slate-600 hover:bg-blue-50">Ecosystem</a>
-             <a href="#community" class="block text-center py-3 px-4 font-semibold text-slate-600 hover:bg-blue-50">Community</a>
-             <a href="#faq" class="block text-center py-3 px-4 font-semibold text-slate-600 hover:bg-blue-50">FAQ</a>
         </div>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section id="home" class="min-h-screen flex items-center justify-center text-center px-4 bg-gradient-to-b from-sky-100 to-white">
-            <div class="max-w-4xl">
-                <h1 id="hero-headline" class="text-5xl md:text-7xl epic-heading animate-load-in" style="opacity:0;"></h1>
-                <p id="hero-tagline" class="mt-8 text-lg md:text-xl text-slate-500 max-w-2xl mx-auto animate-load-in" style="opacity:0; animation-delay: 0.2s;"></p>
-                <a id="hero-cta" href="#" class="mt-12 inline-block px-10 py-4 premium-button animate-load-in" style="opacity:0; animation-delay: 0.4s;"></a>
-            </div>
-        </section>
-
-        <!-- Big Image Banner Section -->
-        <section id="banner" class="pb-20 lg:pb-32 bg-white">
-            <div class="container mx-auto px-6">
-                <img id="banner-image" src="" alt="The Pebble Guild Characters" class="rounded-3xl w-full h-auto shadow-xl animate-on-scroll pop-in">
+        <section id="home">
+            <div id="hero-container">
+                <div id="hero-background"></div>
+                <div id="hero-foreground">
+                    <!-- Part 1: Text visible on load -->
+                    <div class="h-screen w-full flex items-center justify-center">
+                        <div class="text-center text-white max-w-5xl p-8">
+                            <h1 id="hero-headline" class="text-5xl md:text-7xl font-black" style="text-shadow: 0 2px 10px rgba(0,0,0,0.5);"></h1>
+                            <p id="hero-tagline" class="mt-8 text-lg md:text-xl max-w-2xl mx-auto" style="text-shadow: 0 2px 5px rgba(0,0,0,0.5);"></p>
+                            <a id="hero-cta" href="#" class="mt-12 inline-block px-10 py-4 premium-button"></a>
+                        </div>
+                    </div>
+                    <!-- Part 2: Image appears on scroll -->
+                    <div class="h-screen w-full flex items-center justify-center">
+                         <img id="hero-nft-image" src="" alt="Pebble Guild NFT Character" class="w-full h-auto object-contain max-h-[85vh] rounded-2xl shadow-2xl">
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- The Lore Section -->
-        <section id="lore" class="py-20 lg:py-32 overflow-hidden bg-sky-50">
-            <div class="container mx-auto px-6">
-                <div class="grid lg:grid-cols-2 gap-16 items-center">
-                    <div class="animate-on-scroll slide-in-left">
-                        <h2 id="lore-subheading" class="text-4xl md:text-5xl font-bold section-heading"></h2>
-                        <div id="lore-body" class="mt-6 text-slate-500 leading-relaxed space-y-4"></div>
-                    </div>
-                    <div class="animate-on-scroll slide-in-right">
-                         <img id="lore-image" src="" alt="Concept Art of The Pebble Guild's world" class="rounded-3xl w-full h-auto shadow-xl">
-                    </div>
+        <section id="lore" class="py-20 lg:py-32 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 id="lore-subheading" class="text-4xl md:text-5xl section-heading animate-on-scroll"></h2>
+                 <div id="lore-body" class="mt-6 text-slate-500 leading-relaxed space-y-4 max-w-3xl mx-auto animate-on-scroll"></div>
+                <div class="mt-12 max-w-4xl mx-auto animate-on-scroll">
+                    <img id="lore-gif" src="" alt="Concept art animation" class="rounded-2xl shadow-xl w-full">
                 </div>
             </div>
         </section>
         
         <!-- The Roadmap Section -->
-        <section id="roadmap" class="py-20 lg:py-32 bg-white">
+        <section id="roadmap" class="py-20 lg:py-32 bg-slate-100">
              <div class="container mx-auto px-6 text-center">
-                 <h2 id="roadmap-subheading" class="text-4xl md:text-5xl font-bold section-heading animate-on-scroll slide-in-up"></h2>
-                 <p id="roadmap-description" class="mt-4 text-slate-500 max-w-2xl mx-auto animate-on-scroll slide-in-up"></p>
-                 <div id="roadmap-chapters-container" class="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
-                    <!-- Roadmap chapters will be generated here by JS -->
+                 <h2 id="roadmap-subheading" class="text-4xl md:text-5xl section-heading animate-on-scroll"></h2>
+                 <p id="roadmap-description" class="mt-4 text-slate-500 max-w-2xl mx-auto animate-on-scroll"></p>
+                 <div class="roadmap-path mt-16 flex flex-col lg:flex-row justify-center items-center gap-y-24 lg:gap-x-32">
+                    <!-- Roadmap items will be injected here -->
                  </div>
              </div>
         </section>
         
         <!-- Explore the Ecosystem Section -->
-        <section id="ecosystem" class="py-20 lg:py-32 bg-sky-50">
+        <section id="ecosystem" class="py-20 lg:py-32 bg-white">
             <div class="container mx-auto px-6 text-center">
-                <h2 id="ecosystem-subheading" class="text-4xl md:text-5xl font-bold section-heading animate-on-scroll slide-in-up"></h2>
-                <p id="ecosystem-description" class="mt-4 text-slate-500 max-w-2xl mx-auto animate-on-scroll slide-in-up"></p>
+                <h2 id="ecosystem-subheading" class="text-4xl md:text-5xl section-heading animate-on-scroll"></h2>
                 <div id="ecosystem-cards-container" class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Ecosystem cards will be generated here by JS -->
+                    <!-- Ecosystem cards will be injected here -->
                 </div>
             </div>
         </section>
 
         <!-- Community Section -->
-        <section id="community" class="py-20 lg:py-32 bg-white">
+        <section id="community" class="py-20 lg:py-32 bg-slate-100">
              <div class="container mx-auto px-6 text-center">
-                 <h2 id="community-subheading" class="text-4xl md:text-5xl font-bold section-heading animate-on-scroll slide-in-up"></h2>
-                 <p id="community-description" class="mt-4 text-slate-500 max-w-2xl mx-auto animate-on-scroll slide-in-up"></p>
-                 <div id="community-links-container" class="mt-12 flex justify-center flex-wrap gap-4 animate-on-scroll slide-in-up">
-                    <!-- Community buttons will be generated here by JS -->
-                 </div>
+                 <h2 id="community-subheading" class="text-4xl md:text-5xl section-heading animate-on-scroll"></h2>
+                 <p id="community-description" class="mt-4 text-slate-500 max-w-2xl mx-auto animate-on-scroll"></p>
+                 <div id="community-links-container" class="mt-12 flex justify-center flex-wrap gap-4 animate-on-scroll"></div>
              </div>
         </section>
 
         <!-- FAQ Section -->
-        <section id="faq" class="py-20 lg:py-32 bg-sky-50">
+        <section id="faq" class="py-20 lg:py-32 bg-white">
             <div class="container mx-auto px-6 max-w-4xl">
-                <h2 id="faq-subheading" class="text-4xl md:text-5xl font-bold section-heading text-center animate-on-scroll slide-in-up"></h2>
-                <div id="faq-questions-container" class="mt-12 space-y-8 animate-on-scroll slide-in-up">
+                <h2 id="faq-subheading" class="text-4xl md:text-5xl section-heading text-center animate-on-scroll"></h2>
+                <div id="faq-questions-container" class="mt-12 space-y-8 animate-on-scroll">
                     <!-- FAQ items will be generated here by JS -->
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 lg:py-32 bg-white">
+        <section id="contact" class="py-20 lg:py-32 bg-slate-100">
              <div class="container mx-auto px-6 text-center">
-                 <h2 id="contact-subheading" class="text-4xl md:text-5xl font-bold section-heading animate-on-scroll slide-in-up"></h2>
-                 <p id="contact-description" class="mt-4 text-slate-500 max-w-2xl mx-auto animate-on-scroll slide-in-up"></p>
-                 <a id="contact-cta" href="#" class="mt-8 inline-block px-10 py-4 premium-button animate-on-scroll slide-in-up"></a>
+                 <h2 id="contact-subheading" class="text-4xl md:text-5xl section-heading animate-on-scroll"></h2>
+                 <p id="contact-description" class="mt-4 text-slate-500 max-w-2xl mx-auto animate-on-scroll"></p>
+                 <a id="contact-cta" href="#" class="mt-8 inline-block px-10 py-4 premium-button animate-on-scroll"></a>
              </div>
         </section>
     </main>
@@ -230,17 +237,14 @@
     </footer>
 
     <script>
-        // =================================================================
-        // THE PEBBLE GUILD - WEBSITE CONTENT CONFIGURATION
-        // =================================================================
         const guildConfig = {
             hero: {
+                backgroundImage: "assets/BG.png",
+                // A transparent PNG works best
                 headline: "VALUE IS NOT FOUND. IT IS FORGED.",
-                tagline: "A cinematic universe of myth, mastery, and the artisans who shape legends from ice and starlight. This is The Pebble Guild.",
+                tagline: "A cinematic universe of myth, mastery, and the artisans who shape legends.",
                 ctaButton: { text: "WATCH THE FIRST CHRONICLE", link: "#" },
-            },
-            banner: {
-                image: "https://i.imgur.com/example.jpg" // Placeholder for your big banner image
+		        nftImage: "assets/lore-artwork.png",
             },
             lore: {
                 subheading: "From the Endless Ice, A New Legend Emerges",
@@ -248,33 +252,36 @@
                     "In the heart of the frozen continent, where the southern lights whisper secrets to the ancient glaciers, there exists a society unlike any other: The Pebble Guild.",
                     "They are not mere collectors, content with what the tide offers. They are masters, artisans, and explorers. They believe that true value is not found by chance, but forged through perilous journeys, masterful skill, and a touch of the cosmic.",
                     "From their hidden workshops, they venture into the unknown to gather impossible materials—the light of a fallen star, the echo of a whale's song, the chill of a timeless blizzard. With these, they craft pebbles of immense power and beauty, each a testament to a legendary journey.",
-                    "The Pebble Guild is the story of these artisans. Their tales are just beginning."
                 ],
-                image: "https://placehold.co/600x400/a3d5ff/1e293b?text=Lore+Artwork"
+                gif: "assets/ComingSoon.gif"
             },
             roadmap: {
                 subheading: "The Journey Ahead",
                 description: "Our chronicle is written in phases, with our community at its core.",
                 chapters: [
-                    { title: "Chapter I: The Gathering", points: ["The launch of our cinematic universe on YouTube & TikTok.", "The formation of our core community on X and Discord.", "The telling of the first tales."] },
-                    { title: "Chapter II: The First Forging", points: ["The \"Artisan's Pebble\" arrives. Your first chance to hold a piece of the Guild and prove your early belief in our journey."] },
-                    { title: "Chapter III: The Guild Assembles", points: ["The main \"Penguin Guild Member\" collection is revealed. Your key to becoming a permanent member of our world."] },
-                    { title: "Chapter IV: The World Expands", points: ["The development of The Pebble Guild game begins.", "The launch of exclusive, high-quality merchandise.", "And much more..."] }
+                    { title: "Chapter I: The Gathering", image: "https://placehold.co/300x200/cccccc/333333?text=Chapter+I" },
+                    { title: "Chapter II: The First Forging", image: "https://placehold.co/300x200/cccccc/333333?text=Chapter+II" },
+                    { title: "Chapter III: The Guild Assembles", image: "https://placehold.co/300x200/cccccc/333333?text=Chapter+III" },
+                    { title: "Chapter IV: The World Expands", image: "https://placehold.co/800x450/111111/ffffff?text=The+Grand+Finale" } // Final "cinema" image
                 ]
             },
             ecosystem: {
                 subheading: "The Future is Forged",
-                description: "Our world extends beyond the chronicles. These are the pillars of the future Guild ecosystem.",
                 cards: [
-                    { title: "The Gallery", description: "The official home for all Guild artifacts. A curated gallery where verified members can trade, collect, and showcase their forged pebbles and unique artisans.", buttonText: "VIEW ON OPENSEA (COMING SOON)" },
-                    { title: "The Proving Grounds", description: "An interactive realm is under construction. A place for Guild members to embark on new journeys, test their skills, and uncover deeper layers of the Guild's story.", buttonText: "ENTER GAMING HUB (COMING SOON)" },
-                    { title: "The Forge", description: "Wear the mark of the Guild. A premium collection of apparel and artifacts, designed for the most dedicated members of our expedition.", buttonText: "BROWSE MERCH (COMING SOON)" }
+                    { title: "The Gallery", backgroundImage: "https://placehold.co/500x700/2c3e50/ffffff?text=Gallery" },
+                    { title: "The Proving Grounds", backgroundImage: "https://placehold.co/500x700/34495e/ffffff?text=Gaming+Hub" },
+                    { title: "The Forge", backgroundImage: "https://placehold.co/500x700/16a085/ffffff?text=Merch" }
                 ]
             },
             community: {
                 subheading: "JOIN THE EXPEDITION",
-                description: "The Guild's story is best experienced together. Follow our journey, join the discussion, and become a founding member of our community.",
-                links: [ { name: "Youtube", url: "#" }, { name: "TikTok", url: "#" }, { name: "X", url: "#" }, { name: "Discord", url: "#" } ]
+                description: "The Guild's story is best experienced together.",
+                links: [
+                    { name: "Youtube", url: "https://www.youtube.com/@ThePebbleGuild" },
+                    { name: "TikTok", url: "https://www.tiktok.com/@the_pebble_guild?is_from_webapp=1&sender_device=pc" },
+                    { name: "X", url: "https://x.com/ThePebbleGuild" },
+                    { name: "Discord", url: "https://discord.gg/ZHJ7cgsR" }
+                ]
             },
             faq: {
                 subheading: "Frequently Asked Questions",
@@ -292,60 +299,76 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Populate Content ---
+            // --- Populate Hero ---
+            document.getElementById('hero-background').style.backgroundImage = `url('${guildConfig.hero.backgroundImage}')`;
             document.getElementById('hero-headline').textContent = guildConfig.hero.headline;
             document.getElementById('hero-tagline').textContent = guildConfig.hero.tagline;
             const heroCta = document.getElementById('hero-cta');
             heroCta.textContent = guildConfig.hero.ctaButton.text;
             heroCta.href = guildConfig.hero.ctaButton.link;
+            document.getElementById('hero-nft-image').src = guildConfig.hero.nftImage;
 
-            document.getElementById('banner-image').src = guildConfig.banner.image;
-
+            // --- Populate Lore ---
             document.getElementById('lore-subheading').textContent = guildConfig.lore.subheading;
             const loreBody = document.getElementById('lore-body');
             guildConfig.lore.bodyText.forEach(p => { const pElement = document.createElement('p'); pElement.textContent = p; loreBody.appendChild(pElement); });
-            document.getElementById('lore-image').src = guildConfig.lore.image;
+            document.getElementById('lore-gif').src = guildConfig.lore.gif;
 
+            // --- Populate Roadmap ---
             document.getElementById('roadmap-subheading').textContent = guildConfig.roadmap.subheading;
             document.getElementById('roadmap-description').textContent = guildConfig.roadmap.description;
-            const roadmapContainer = document.getElementById('roadmap-chapters-container');
+            const roadmapContainer = document.querySelector('#roadmap .roadmap-path');
             guildConfig.roadmap.chapters.forEach((chapter, index) => {
-                const pointsList = chapter.points.length > 1 ? `<ul class="mt-4 space-y-2 text-sm text-slate-500 list-disc list-inside">${chapter.points.map(p => `<li>${p}</li>`).join('')}</ul>` : `<p class="mt-4 text-sm text-slate-500">${chapter.points[0]}</p>`;
-                roadmapContainer.innerHTML += `<div class="content-card p-6 h-full animate-on-scroll slide-in-up" style="transition-delay: ${index * 100}ms;"><h3 class="text-lg font-bold text-blue-500">${chapter.title}</h3>${pointsList}</div>`;
-            });
-
-            document.getElementById('ecosystem-subheading').textContent = guildConfig.ecosystem.subheading;
-            document.getElementById('ecosystem-description').textContent = guildConfig.ecosystem.description;
-            const ecosystemContainer = document.getElementById('ecosystem-cards-container');
-            guildConfig.ecosystem.cards.forEach((cardItem, index) => {
-                ecosystemContainer.innerHTML += `<div class="content-card p-8 animate-on-scroll slide-in-up" style="transition-delay: ${index * 100}ms;"><h3 class="text-2xl font-bold">${cardItem.title}</h3><p class="mt-4 text-slate-500">${cardItem.description}</p><button class="disabled-button mt-8 px-6 py-3 uppercase font-bold tracking-wider rounded-lg text-sm">${cardItem.buttonText}</button></div>`;
+                const isLast = index === guildConfig.roadmap.chapters.length - 1;
+                const itemClass = isLast ? 'lg:col-span-2' : '';
+                roadmapContainer.innerHTML += `
+                    <div class="roadmap-item relative text-center animate-on-scroll ${itemClass}" style="transition-delay: ${index * 200}ms;">
+                        <img src="${chapter.image}" alt="${chapter.title}" class="rounded-xl shadow-lg mx-auto ${isLast ? 'w-full max-w-4xl' : 'w-64'}">
+                        <h3 class="mt-4 text-xl font-bold">${chapter.title}</h3>
+                    </div>
+                `;
             });
             
+            // --- Populate Ecosystem ---
+            document.getElementById('ecosystem-subheading').textContent = guildConfig.ecosystem.subheading;
+            const ecosystemContainer = document.getElementById('ecosystem-cards-container');
+            guildConfig.ecosystem.cards.forEach((card, index) => {
+                ecosystemContainer.innerHTML += `
+                    <div class="ecosystem-card h-96 animate-on-scroll" style="background-image: url('${card.backgroundImage}'); transition-delay: ${index * 200}ms;">
+                        <div class="overlay"></div>
+                        <div class="relative z-10 p-8 flex flex-col items-center justify-center h-full text-white">
+                             <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" /></svg>
+                            <h3 class="text-3xl font-black uppercase">${card.title}</h3>
+                            <p class="mt-2 text-lg font-semibold">Coming Soon</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // --- Populate Community ---
             document.getElementById('community-subheading').textContent = guildConfig.community.subheading;
             document.getElementById('community-description').textContent = guildConfig.community.description;
             const communityContainer = document.getElementById('community-links-container');
-            guildConfig.community.links.forEach(link => { communityContainer.innerHTML += `<a href="${link.url}" class="premium-button px-6 py-3 text-sm">${link.name}</a>`; });
-
+            guildConfig.community.links.forEach(link => { communityContainer.innerHTML += `<a href="${link.url}" target="_blank" rel="noopener noreferrer" class="premium-button px-6 py-3 text-sm">${link.name}</a>`; });
+            
+            // --- Populate FAQ ---
             document.getElementById('faq-subheading').textContent = guildConfig.faq.subheading;
             const faqContainer = document.getElementById('faq-questions-container');
-            guildConfig.faq.questions.forEach(item => { faqContainer.innerHTML += `<div class="content-card p-6 animate-on-scroll slide-in-up"><h3 class="text-xl font-bold">${item.q}</h3><p class="mt-2 text-slate-500">${item.a}</p></div>`; });
-            
+            guildConfig.faq.questions.forEach((item, index) => {
+                 faqContainer.innerHTML += `<div class="p-6 bg-white rounded-xl shadow-md animate-on-scroll" style="transition-delay: ${index * 100}ms;"><h3 class="text-xl font-bold">${item.q}</h3><p class="mt-2 text-slate-500">${item.a}</p></div>`;
+            });
+
+            // --- Populate Contact ---
             document.getElementById('contact-subheading').textContent = guildConfig.contact.subheading;
             document.getElementById('contact-description').textContent = guildConfig.contact.description;
             const contactCta = document.getElementById('contact-cta');
             contactCta.textContent = guildConfig.contact.ctaButton.text;
             contactCta.href = guildConfig.contact.ctaButton.link;
 
-
             initializeScrollAnimations();
         });
 
-
-        // JavaScript for Mobile Menu & Scroll Animations
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-
+        // Scroll Animations
         function initializeScrollAnimations() {
             const targets = document.querySelectorAll('.animate-on-scroll');
             const observer = new IntersectionObserver((entries) => {
@@ -355,10 +378,7 @@
                     }
                 });
             }, { threshold: 0.1 });
-
-            targets.forEach(target => {
-                observer.observe(target);
-            });
+            targets.forEach(target => observer.observe(target));
         }
     </script>
 
